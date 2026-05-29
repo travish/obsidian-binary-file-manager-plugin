@@ -109,6 +109,11 @@ export default class BinaryFileManagerPlugin extends Plugin {
 						continue;
 					}
 
+					// Check if the file path should be ignored during manual detection
+					if (this.isPathIgnored(file.path)) {
+						return;
+					}
+
 					promises.push(
 						this.metaDataGenerator
 							.create(file as TFile)
@@ -133,6 +138,10 @@ export default class BinaryFileManagerPlugin extends Plugin {
 				const unlinkedFiles =
 					this.metaDataGenerator.findUnlinkedBinaries();
 				unlinkedFiles.forEach((file) => {
+					// Check if the file path should be ignored during unlinked detection
+					if (this.isPathIgnored(file.path)) {
+						return;
+					}
 					promises.push(
 						this.metaDataGenerator
 							.create(file as TFile)
